@@ -2,11 +2,24 @@ package com.leonardo.beans;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+//Define que o nome da tabela e a associação vem dessa classe devido ao nome.
+@Entity
 public class Categoria implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
+
+	//Define que é o ID da classe.
+	@Id
+	//Auto-Incrementa o ID.
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	//Muda o nome da coluna conforme o parametro
+	//@Column(name="nomeCompleto")
 	private String nome;
 	
 	public Categoria() {
