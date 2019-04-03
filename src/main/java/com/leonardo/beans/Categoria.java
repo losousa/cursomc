@@ -1,11 +1,14 @@
 package com.leonardo.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 //Define que o nome da tabela e a associação vem dessa classe devido ao nome.
 @Entity
@@ -21,6 +24,12 @@ public class Categoria implements Serializable{
 	//Muda o nome da coluna conforme o parametro
 	//@Column(name="nomeCompleto")
 	private String nome;
+	
+	//Relacionamento muitos pra muitos com o Produto
+	//MappedBy define que foi mapeado na classe de Produto e não precisa fazer novamente aqui.
+	@ManyToMany(mappedBy="cat")
+	//Pegar uma Lista de Produtos.
+	private List<Produto> prod = new ArrayList<>();
 	
 	public Categoria() {
 	}
@@ -44,6 +53,14 @@ public class Categoria implements Serializable{
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public void setProdutos(List<Produto> prod) {
+		this.prod = prod;
+	}
+	
+	public List<Produto> getProdutos(){
+		return prod;
 	}
 	
 	public String toString() {
