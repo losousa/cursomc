@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Cliente implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -31,8 +33,13 @@ public class Cliente implements Serializable{
 	private Set<String> telefone = new HashSet<>();
 	
 	@OneToMany(mappedBy="cliente")
+	//O cliente pode pegar os enderecos
+	//Mas o endereco não pode pegar um cliente
+	@JsonManagedReference
 	private List<Endereco> endereco;
 	
+	public Cliente() {
+	}
 	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
 		super();
 		this.id = id;
