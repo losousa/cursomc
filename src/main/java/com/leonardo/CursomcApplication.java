@@ -1,5 +1,6 @@
 package com.leonardo;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,11 @@ import com.leonardo.beans.Cidade;
 import com.leonardo.beans.Cliente;
 import com.leonardo.beans.Endereco;
 import com.leonardo.beans.Estado;
+import com.leonardo.beans.EstadoPagamento;
+import com.leonardo.beans.Pagamento;
+import com.leonardo.beans.PagamentoBoleto;
+import com.leonardo.beans.PagamentoCartao;
+import com.leonardo.beans.Pedido;
 import com.leonardo.beans.Produto;
 import com.leonardo.beans.TipoCliente;
 import com.leonardo.repository.CategoriaRepository;
@@ -19,6 +25,8 @@ import com.leonardo.repository.CidadeRepository;
 import com.leonardo.repository.ClienteRepository;
 import com.leonardo.repository.EnderecoRepository;
 import com.leonardo.repository.EstadoRepository;
+import com.leonardo.repository.PagamentoRepository;
+import com.leonardo.repository.PedidoRepository;
 import com.leonardo.repository.ProdutoRepository;
 
 //Classe que vai fazer a aplicação funcionar
@@ -27,6 +35,8 @@ import com.leonardo.repository.ProdutoRepository;
 
 //Implementa métodos pra toda vez que o programa rodar, fazer o que esta no método.
 public class CursomcApplication implements CommandLineRunner{
+	
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
 	@Autowired
 	private CategoriaRepository repo;
@@ -45,6 +55,12 @@ public class CursomcApplication implements CommandLineRunner{
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -95,6 +111,19 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(end1,end2));
+		
+		//Pedido,Pagamento
+		Pedido pe1 = new Pedido(null,sdf.parse("30/09/2017"),end1,cli1);
+		Pagamento pa = new PagamentoCartao(null,EstadoPagamento.PAGO,pe1,6);
+		pe1.setPagamento(pa);
+		Pedido pe2 = new Pedido(null,sdf.parse("10/10/2017"),end2,cli1);
+		Pagamento pa2 = new PagamentoBoleto(null, EstadoPagamento.NAOPAGO,pe2, sdf.parse("20/10/2017"), null);
+		pe2.setPagamento(pa2);
+		cli1.getPedidos().addAll(Arrays.asList(pe1,pe2));
+		
+		pedidoRepository.saveAll(Arrays.asList(pe1,pe2));
+		pagamentoRepository.saveAll(Arrays.asList(pa,pa2));
+		
 	}
 
 }

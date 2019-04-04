@@ -1,6 +1,7 @@
 package com.leonardo.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +38,9 @@ public class Cliente implements Serializable{
 	//Mas o endereco não pode pegar um cliente
 	@JsonManagedReference
 	private List<Endereco> endereco;
+	
+	@OneToMany(mappedBy="cliente")
+	private List<Pedido> pedidos = new ArrayList<>();
 	
 	public Cliente() {
 	}
@@ -90,6 +94,13 @@ public class Cliente implements Serializable{
 	public void setEndereco(List<Endereco> endereco) {
 		this.endereco = endereco;
 	}
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
