@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.leonardo.beans.Categoria;
 import com.leonardo.repository.CategoriaRepository;
+import com.leonardo.service.exceptions.ObjetoNaoEncontrado;
 
 //Definir que é uma Service
 //Representar o servico do controller com REST
@@ -19,8 +20,14 @@ public class CategoriaService {
 	private CategoriaRepository repo;
 	
 	//Buscar uma categoria por ID do tipo Categoria
-	public Categoria buscarPorId(Integer id) {
+	public Categoria buscarPorIdd(Integer id) {
 		Optional<Categoria> cat = repo.findById(id);
-		return cat.orElse(null);
+		
+		//Caso exista mostrar o nome, caso não exista mostrar a mensagem personalizada da classe ObjetoNaoEncontrado.
+		return cat.orElseThrow(() -> new ObjetoNaoEncontrado("Objeto não encontrado! Id: " + id + ", Tipo: "
+		+ Categoria.class.getName()));
 	}
 }
+
+
+

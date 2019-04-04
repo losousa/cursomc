@@ -12,7 +12,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+
 @Entity
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
 public class Produto implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -21,17 +29,23 @@ public class Produto implements Serializable{
 	private Integer id;
 	private String nome;
 	private Double preco;
-	//Pegar uma lista de Categorias
 	
+	//Pegar uma lista de Categorias
+	@JsonBackReference
+	//Do outro lado da associação já foi buscado os objetos, desse lado eu não busco mais.
 	//Mapeia as classes Categoria e Produto sendo Muitos pra Muitos
 	//Um Produto pode ter várias Categorias e Categorias pode ter vários Produtos
 	@ManyToMany
 	//Quando tem um relacionamento Muitos pra Muitos uma nova tabela é feita juntando as duas ID das classes mapeadas MM.
 	@JoinTable(name="PRODUTO_CATEGORIA",
 			joinColumns = @JoinColumn(name="produto_id"),inverseJoinColumns = @JoinColumn(name="categoria_id"))
-	private List<Categoria> cat = new ArrayList<>();
+	private List<Categoria> categorias = new ArrayList<>();
+	
+	public Produto() {
+	}
 	
 	public Produto(Integer id, String nome, Double preco) {
+		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
@@ -61,16 +75,12 @@ public class Produto implements Serializable{
 		return preco;
 	}
 	
-	public void setCategoria(List<Categoria> cat) {
-		this.cat = cat;
+	public void setCategoria(List<Categoria> categorias) {
+		this.categorias = categorias;
 	}
 	
 	public List<Categoria> getCategoria(){
-		return cat;
-	}
-	
-	public String toString() {
-		return id+", "+nome+", "+preco;
+		return categorias;
 	}
 
 	@Override

@@ -30,8 +30,7 @@ public class CategoriaResource {
 	//necessário para fazer a busca pelo localhost:8080/categorias/(id)
 	//Encapsula,armazena varias informações HTTP para o serviço REST. ? = encontrar ou não encontrar uma categoria
 	public ResponseEntity<?> buscarPorId(@PathVariable Integer id){
-
-		Categoria cat = service.buscarPorId(id);
+		Categoria cat = service.buscarPorIdd(id);
 		//O corpo/body do responseEntity vai ser as informações do ID
 		//elocalizadas pelo localhost:8080/categorias/{id} colocado ex /1
 		return ResponseEntity.ok().body(cat);

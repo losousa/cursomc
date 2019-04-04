@@ -10,8 +10,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 //Define que o nome da tabela e a associação vem dessa classe devido ao nome.
 @Entity
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
 public class Categoria implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -25,16 +32,19 @@ public class Categoria implements Serializable{
 	//@Column(name="nomeCompleto")
 	private String nome;
 	
+	//JsonManagedReference que venha os objetos associados.
+	@JsonManagedReference
 	//Relacionamento muitos pra muitos com o Produto
 	//MappedBy define que foi mapeado na classe de Produto e não precisa fazer novamente aqui.
-	@ManyToMany(mappedBy="cat")
+	@ManyToMany(mappedBy="categorias")
 	//Pegar uma Lista de Produtos.
-	private List<Produto> prod = new ArrayList<>();
+	private List<Produto> produtos = new ArrayList<>();
 	
 	public Categoria() {
 	}
 	
 	public Categoria(Integer id,String nome) {
+		super();
 		this.id = id;
 		this.nome = nome;
 	}
@@ -55,17 +65,14 @@ public class Categoria implements Serializable{
 		this.nome = nome;
 	}
 	
-	public void setProdutos(List<Produto> prod) {
-		this.prod = prod;
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
 	}
 	
 	public List<Produto> getProdutos(){
-		return prod;
+		return produtos;
 	}
-	
-	public String toString() {
-		return id+", "+nome;
-	}
+
 	//HashCode e Equals método para comparar valores.
 	@Override
 	public int hashCode() {

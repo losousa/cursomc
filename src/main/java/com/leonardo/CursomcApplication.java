@@ -8,8 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.leonardo.beans.Categoria;
+import com.leonardo.beans.Cidade;
+import com.leonardo.beans.Estado;
 import com.leonardo.beans.Produto;
 import com.leonardo.repository.CategoriaRepository;
+import com.leonardo.repository.CidadeRepository;
+import com.leonardo.repository.EstadoRepository;
 import com.leonardo.repository.ProdutoRepository;
 
 //Classe que vai fazer a aplicação funcionar
@@ -24,6 +28,12 @@ public class CursomcApplication implements CommandLineRunner{
 
 	@Autowired
 	private ProdutoRepository pro;
+	
+	@Autowired
+	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private EstadoRepository estadoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -47,8 +57,23 @@ public class CursomcApplication implements CommandLineRunner{
 		p2.getCategoria().addAll(Arrays.asList(cat1,cat2));
 		p3.getCategoria().addAll(Arrays.asList(cat1));
 		
+		//Salvando no banco o que foi definido acima
 		repo.saveAll(Arrays.asList(cat1,cat2));
 		pro.saveAll(Arrays.asList(p1,p2,p3));
+		
+		//Cidades e Estados
+		Estado e1 = new Estado(null,"Minas Gerais");
+		Estado e2 = new Estado(null,"Sao Paulo");
+		
+		Cidade c1 = new Cidade(null,"Uberlandia",e1);
+		Cidade c2 = new Cidade(null,"Sao Paulo",e2);
+		Cidade c3 = new Cidade(null,"Campinas",e2);
+		
+		e1.getCidade().addAll(Arrays.asList(c1));
+		e2.getCidade().addAll(Arrays.asList(c2,c3));
+		
+		estadoRepository.saveAll(Arrays.asList(e1,e2));
+		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
 	}
 
 }
